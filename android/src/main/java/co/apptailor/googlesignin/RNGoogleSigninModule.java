@@ -48,15 +48,12 @@ public class RNGoogleSigninModule
         _activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("YOUHOU");
-                System.out.println("API IS NULL " + _apiClient == null);
-
                 GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .requestEmail()
+                        .requestProfile()
                         .build();
 
                 _apiClient = new GoogleApiClient.Builder(_activity.getBaseContext())
-//                        .enableAutoManage(_activity, RNGoogleSigninModule.this)
                         .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                         .build();
                 _apiClient.connect();
@@ -70,7 +67,6 @@ public class RNGoogleSigninModule
         _activity.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("YOUHOU");
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(_apiClient);
                 _activity.startActivityForResult(signInIntent, RC_SIGN_IN);
             }
@@ -130,7 +126,17 @@ public class RNGoogleSigninModule
             GoogleSignInAccount acct = result.getSignInAccount();
             params.putString("name", acct.getDisplayName());
             params.putString("email", acct.getEmail());
-            params.putString("accessToken", acct.getIdToken());
+            
+            // dguillamot - without requestIdToken() in GoogleSignInOptions, this is always null so no need
+            // params.putString("accessToken", acct.getIdToken());
+
+            Uri photoURI = acct.getPhotoUrl();
+            if (photoURI != null) {
+              params.putString("photoURL", photoURI.toString());
+            }
+            else {
+              params.putString("photoURL", null);   
+            }
 
             _context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                     .emit("googleSignIn", params);
