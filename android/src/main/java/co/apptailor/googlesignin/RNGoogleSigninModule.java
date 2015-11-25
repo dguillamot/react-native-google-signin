@@ -3,6 +3,7 @@ package co.apptailor.googlesignin;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.net.Uri;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactApplicationContext;
