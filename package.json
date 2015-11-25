@@ -30,8 +30,5 @@
     "url": "https://github.com/apptailor/react-native-google-signin/issues"
   },
   "homepage": "https://github.com/apptailor/react-native-google-signin",
-  "peerDependencies": {
-    "react-native": ">= 0.8"
-  },
   "license": "MIT"
 }
